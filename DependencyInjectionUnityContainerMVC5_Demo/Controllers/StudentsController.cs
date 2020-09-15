@@ -14,7 +14,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
         }
         public ActionResult Index()
         {
-            var students =unitOfWork.StudentRepository.GetAll();
+            var students = unitOfWork.Students.GetStudentsWithCourse();
             return View(students);
         }
 
@@ -24,7 +24,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student =unitOfWork.StudentRepository.Get(id);
+            Student student = unitOfWork.StudentRepository.Get(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -61,7 +61,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student =unitOfWork.StudentRepository.Get(id);
+            Student student = unitOfWork.StudentRepository.Get(id);
             if (student == null)
             {
                 return HttpNotFound();

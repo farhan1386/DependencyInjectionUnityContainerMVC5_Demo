@@ -8,6 +8,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
         IRepository<Student> StudentRepository { get; }
         IRepository<Course> CourseRepositroy { get; }
         IRepository<Instructor> InstructorRepository { get; }
+        IStudentRepository Students { get; }
         int Complete();
     }
 }

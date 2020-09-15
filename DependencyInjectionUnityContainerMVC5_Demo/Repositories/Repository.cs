@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DependencyInjectionUnityContainerMVC5_Demo.Data;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -9,8 +10,8 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext Context;
-        public Repository(DbContext context)
+        protected readonly ApplicationDbContext Context;
+        public Repository(ApplicationDbContext context)
         {
             Context = context;
         }

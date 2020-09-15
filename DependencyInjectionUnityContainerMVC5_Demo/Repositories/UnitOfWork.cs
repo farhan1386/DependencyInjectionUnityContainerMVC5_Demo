@@ -16,6 +16,8 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
 
         public IRepository<Instructor> InstructorRepository => new Repository<Instructor>(db);
 
+        public IStudentRepository Students => new StudentRepository(db);
+
         public int Complete()
         {
             return db.SaveChanges();
