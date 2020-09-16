@@ -9,7 +9,7 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table table-bordered">
     <tr>
 
         <th>
@@ -33,7 +33,7 @@
         <th>
             @Html.DisplayNameFor(model => model.BatchTime)
         </th>
-        <th></th>
+        <th>Actions(s)</th>
     </tr>
 
     @foreach (var item in Model)

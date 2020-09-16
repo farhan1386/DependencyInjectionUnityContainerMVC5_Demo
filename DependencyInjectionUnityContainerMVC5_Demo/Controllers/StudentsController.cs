@@ -77,7 +77,16 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
         {
             if (ModelState.IsValid)
             {
-                unitOfWork.StudentRepository.Update(student);
+                //unitOfWork.StudentRepository.Update(student);
+                Student edit= unitOfWork.StudentRepository.Get(student.Id);
+                edit.StudentName = student.StudentName;
+                edit.Course = unitOfWork.CourseRepositroy.Get(student.Id);
+                edit.Instructor = unitOfWork.InstructorRepository.Get(student.Id);
+                edit.CourseFee = student.CourseFee;
+                edit.CourseDuration = student.CourseDuration;
+                edit.StartDate = student.StartDate;
+                edit.BatchTime = student.BatchTime;
+                unitOfWork.Complete();
                 return RedirectToAction("Index");
             }
             ViewBag.CourseId = new SelectList(unitOfWork.CourseRepositroy.GetAll(), "Id", "CourseName");

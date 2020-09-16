@@ -9,9 +9,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
         IEnumerable<TEntity> GetAll();
         TEntity Get(int? id);
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
-        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
         void Add(TEntity entity);
-        void Update(TEntity entity);
         void Remove(TEntity entity);
     }
 }

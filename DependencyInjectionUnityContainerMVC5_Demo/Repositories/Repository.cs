@@ -31,17 +31,9 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
         {
             Context.Set<TEntity>().Add(entity);
         }
-        public void Update(TEntity entity)
-        {
-            Context.Set<TEntity>().AddOrUpdate(entity);
-        }
         public void Remove(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
-        }
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
-        {
-            return Context.Set<TEntity>().SingleOrDefault(predicate);
         }
     }
 }
