@@ -24,7 +24,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = unitOfWork.StudentRepository.Get(id);
+            Student student = unitOfWork.StudentRepository.GetById(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -61,7 +61,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = unitOfWork.StudentRepository.Get(id);
+            Student student = unitOfWork.StudentRepository.GetById(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -77,15 +77,14 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
         {
             if (ModelState.IsValid)
             {
-                //unitOfWork.StudentRepository.Update(student);
-                Student edit= unitOfWork.StudentRepository.Get(student.Id);
+                Student edit = unitOfWork.StudentRepository.GetById(student.Id);
                 edit.StudentName = student.StudentName;
-                edit.Course = unitOfWork.CourseRepositroy.Get(student.Id);
-                edit.Instructor = unitOfWork.InstructorRepository.Get(student.Id);
                 edit.CourseFee = student.CourseFee;
+                edit.Course = unitOfWork.CourseRepositroy.GetById(student.CourseId);
                 edit.CourseDuration = student.CourseDuration;
                 edit.StartDate = student.StartDate;
                 edit.BatchTime = student.BatchTime;
+                edit.Instructor = unitOfWork.InstructorRepository.GetById(student.InstructorId);
                 unitOfWork.Complete();
                 return RedirectToAction("Index");
             }
@@ -100,7 +99,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = unitOfWork.StudentRepository.Get(id);
+            Student student = unitOfWork.StudentRepository.GetById(id);
             if (student == null)
             {
                 return HttpNotFound();
@@ -112,7 +111,7 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var entity = unitOfWork.StudentRepository.Get(id);
+            var entity = unitOfWork.StudentRepository.GetById(id);
             unitOfWork.StudentRepository.Remove(entity);
             unitOfWork.Complete();
             return RedirectToAction("Index");

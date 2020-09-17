@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using CURDWithEntityFrameworkCodeFirstWebAPI_Demo.Models;
+using DependencyInjectionUnityContainerMVC5_Demo.Repositories;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using CURDWithEntityFrameworkCodeFirstWebAPI_Demo.Models;
-using DependencyInjectionUnityContainerMVC5_Demo.Data;
 
 namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
 {
     public class InstructorsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-        // GET: Instructors
-        public ActionResult Index()
+        private UnitOfWork unitOfWork;
+        public InstructorsController(UnitOfWork unitOfWork)
         {
-            return View(db.Instructor.ToList());
+            this.unitOfWork = unitOfWork;
         }
 
-        // GET: Instructors/Details/5
+        public ActionResult Index()
+        {
+            var instructors = unitOfWork.InstructorRepository.GetAll();
+            return View(instructors);
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructor.Find(id);
+            Instructor instructor = unitOfWork.InstructorRepository.GetById(id);
             if (instructor == null)
             {
                 return HttpNotFound();
@@ -36,37 +33,32 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             return View(instructor);
         }
 
-        // GET: Instructors/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Instructors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,InstructorName,Qualification,Experience")] Instructor instructor)
+        public ActionResult Create(Instructor instructor)
         {
             if (ModelState.IsValid)
             {
-                db.Instructor.Add(instructor);
-                db.SaveChanges();
+                unitOfWork.InstructorRepository.Add(instructor);
+                unitOfWork.Complete();
                 return RedirectToAction("Index");
             }
 
             return View(instructor);
         }
 
-        // GET: Instructors/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructor.Find(id);
+            Instructor instructor = unitOfWork.InstructorRepository.GetById(id);
             if (instructor == null)
             {
                 return HttpNotFound();
@@ -74,30 +66,29 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             return View(instructor);
         }
 
-        // POST: Instructors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,InstructorName,Qualification,Experience")] Instructor instructor)
+        public ActionResult Edit(Instructor instructor)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(instructor).State = EntityState.Modified;
-                db.SaveChanges();
+                Instructor edit = unitOfWork.InstructorRepository.GetById(instructor.Id);
+                edit.InstructorName = instructor.InstructorName;
+                edit.Qualification = instructor.Qualification;
+                edit.Experience = instructor.Experience;
+                unitOfWork.Complete();
                 return RedirectToAction("Index");
             }
             return View(instructor);
         }
 
-        // GET: Instructors/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructor.Find(id);
+            Instructor instructor = unitOfWork.InstructorRepository.GetById(id);
             if (instructor == null)
             {
                 return HttpNotFound();
@@ -105,24 +96,14 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Controllers
             return View(instructor);
         }
 
-        // POST: Instructors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Instructor instructor = db.Instructor.Find(id);
-            db.Instructor.Remove(instructor);
-            db.SaveChanges();
+            Instructor instructor = unitOfWork.InstructorRepository.GetById(id);
+            unitOfWork.InstructorRepository.Remove(instructor);
+            unitOfWork.Complete();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

@@ -15,17 +15,13 @@ namespace DependencyInjectionUnityContainerMVC5_Demo.Repositories
         {
             Context = context;
         }
-        public TEntity Get(int? id)
-        {
-            return Context.Set<TEntity>().Find(id);
-        }
         public IEnumerable<TEntity> GetAll()
         {
             return Context.Set<TEntity>().ToList();
         }
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public TEntity GetById(int? id)
         {
-            return Context.Set<TEntity>().Where(predicate);
+            return Context.Set<TEntity>().Find(id);
         }
         public void Add(TEntity entity)
         {
